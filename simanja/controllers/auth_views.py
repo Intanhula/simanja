@@ -32,6 +32,12 @@ def login():
             message = "Gagal login, username atau password salah."
     return render_template('auth/login.html', message=message)
 
+@auth_bp.route('/')
+def index():
+    if 'user' in session:
+        return redirect(url_for('auth.dashboard'))
+    return redirect(url_for('auth.login'))
+
 @auth_bp.route('/dashboard')
 def dashboard():
     if 'user' not in session:
