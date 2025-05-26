@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Koneksi</title>
+</head>
+<body>
+    <h2>Test Koneksi Database</h2>
+
+    <form method="POST">
+        <button type="submit">Test Koneksi</button>
+    </form>
+
+    {% if status %}
+        <p style="color: red;">{{ status }}</p>
+    {% endif %}
+</body>
+</html>
+
