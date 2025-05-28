@@ -37,12 +37,12 @@
                                 <img src="/static/assets/images/user/avatar-1.jpg" class="img-radius"
                                     alt="User-Profile-Image">
                                 <span>
-                                    {{ current_user.username }}
+                                   {{ user }}
                                 </span>
                             </div>
                             <ul class="pro-body">
                                 <li>
-                                    <a href="{{ url_for('authentication_blueprint.logout') }}" 
+                                    <a href="{{ url_for('auth.logout') }}" 
                                        class="dropdown-item"><i
                                             class="feather icon-lock"></i> Logout</a></li>
                             </ul>

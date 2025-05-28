@@ -9,4 +9,3 @@ def create_app():
 
     register_routes(app)
     return app
-
