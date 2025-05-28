@@ -58,9 +58,10 @@
           <table class="table table-bordered table-hover">
             <thead class="table-dark">
               <tr>
-                <th>No</th>
+                <th style="width: 4rem;">No</th>
                 <th>Category Code</th>
                 <th>Category Name</th>
+                <th style="width: 6rem; text-align: center;">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -70,6 +71,16 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ category.category_full_code }}</td>
                 <td>{{ category.category_name }}</td>
+                <td class="text-center">
+                  <!-- Edit icon -->
+                  <a href="" class="text-primary me-2" title="Edit">
+                    <i class="feather icon-edit"></i>
+                  </a>
+                  <!-- Delete icon -->
+                  <a href="" class="text-danger" title="Delete" onclick="return confirm('Yakin ingin menghapus?');">
+                    <i class="feather icon-trash-2"></i>
+                  </a>
+                </td>
               </tr>
               {% endfor %}
               {% else %}

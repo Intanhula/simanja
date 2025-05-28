@@ -1,8 +1,19 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
 from simanja.models import item as item_model
+from functools import wraps
 
 item_bp = Blueprint('item', __name__)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('auth.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @item_bp.route('/category', methods=['GET', 'POST'])
+@login_required
 def category():
     message = None
     if request.method == 'POST':

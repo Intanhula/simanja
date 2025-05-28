@@ -12,14 +12,24 @@ def get_connection():
         port=Config.DB_PORT
     )
 
-def create_user(username, password):
+def create_user(username, password, email):
     password_hash = generate_password_hash(password)
     conn = get_connection()
     cur = conn.cursor()
     try:
+        # Cek apakah username atau email sudah terdaftar
         cur.execute(
-            "INSERT INTO user_login (user_name, password_hash) VALUES (%s, %s)",
-            (username, password_hash)
+            "SELECT 1 FROM user_login WHERE user_name = %s OR email = %s",
+            (username, email)
+        )
+        if cur.fetchone():
+            print("Username atau email sudah terdaftar.")
+            return False
+
+        # Insert jika belum ada
+        cur.execute(
+            "INSERT INTO user_login (user_name, password_hash, email) VALUES (%s, %s, %s)",
+            (username, password_hash, email)
         )
         conn.commit()
         return True
@@ -31,7 +41,7 @@ def create_user(username, password):
         cur.close()
         conn.close()
 
-def verify_user(username, password):
+def verify_login(username, password):
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
@@ -42,7 +52,7 @@ def verify_user(username, password):
         else:
             return False
     except Exception as e:
-        print(f"Error verify_user: {e}")
+        print(f"Error verify_login: {e}")
         return False
     finally:
         cur.close()

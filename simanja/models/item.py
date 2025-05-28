@@ -77,14 +77,18 @@ def get_all_items():
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
-        cur.execute("SELECT * FROM item_assets.v_item_full")
+        cur.execute("SELECT * FROM item_assets.get_item_details()")
         rows = cur.fetchall()
-        #untuk manipulasi data
+
+        # Cek isi data di console (untuk debugging)
+        #print("[DEBUG] Hasil get_item_details:", rows)
+
         return rows
+
     except Exception as e:
-        print(f"Error get_all_items: {e}")
+        print(f"[ERROR] get_all_items: {e}")
         return []
+
     finally:
         cur.close()
         conn.close()
-

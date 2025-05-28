@@ -18,7 +18,7 @@
 
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                    + Add Item
+                    + Item
                 </button>
 
                 <!-- Items Table -->
@@ -48,7 +48,7 @@
                             <td>{{ item.category_name }}</td>
                             <td>{{ item.received_date }}</td>
                             <td>{{ item.category_status_name }}</td>
-                            <td>{{ item.category_status_name }}</td>
+                            <td>{{ item.user_name }}</td>
                             <td>{{ item.takeout_date or '-' }}</td>
                         </tr>
                         {% endfor %}

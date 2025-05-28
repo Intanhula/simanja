@@ -9,12 +9,13 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if username and password:
-            success = user_model.create_user(username, password)
+        email = request.form.get('email')
+        if username and password and email:
+            success = user_model.create_user(username, password, email)
             if success:
                 return redirect(url_for('auth.login'))
             else:
-                message = "User sudah ada atau error saat registrasi."
+                message = "User atau email sudah terdaftar."
         else:
             message = "Username dan password harus diisi."
     return render_template('auth/register.html', message=message)
@@ -25,7 +26,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if user_model.verify_user(username, password):
+        if user_model.verify_login(username, password):
             session['user'] = username
             return redirect(url_for('auth.dashboard'))
         else:

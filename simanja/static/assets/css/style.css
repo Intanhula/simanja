@@ -533,7 +533,7 @@ svg {
 table {
     caption-side: bottom;
     border-collapse: collapse;
-    font-size: 0.8rem; /* Ukuran teks lebih kecil */
+    font-size: 10px; /* Ukuran teks lebih kecil */
 }
 
 caption {
@@ -544,7 +544,7 @@ caption {
 }
 
 th {
-    text-align: center;
+    text-align: left;
     vertical-align: middle; /* Opsional: agar vertikalnya juga di tengah */
 }
 
@@ -28934,7 +28934,7 @@ body.box-layout .pcoded-navbar.theme-horizontal ~ .pcoded-header {
 
 .table thead th {
     border-bottom: 0px solid #e2e5e8;
-    font-size: 11px;
+    font-size: 10px;
     color: #222;
     background: #f6f7fb;
     text-transform: uppercase;
