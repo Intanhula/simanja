@@ -1,0 +1,104 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+    <!-- [ Main Content ] start -->
+    <!-- Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form method="POST" action="{{ url_for('item.category') }}">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="categoryModalLabel">Tambah Category</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="category_name" class="form-label">Category Name</label>
+                <input type="text" class="form-control" id="category_name" name="category_name" required>
+              </div>
+              <div class="mb-3">
+                <label for="category_alias" class="form-label">Category Alias</label>
+                <input type="text" class="form-control" id="category_alias" maxlength="6" name="category_alias" required>
+              </div>
+              <div class="mb-3">
+                <label for="category_code" class="form-label">Category Code</label>
+                <input type="number" class="form-control" id="category_code" name="category_code" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- [ Main Table ] start -->
+    <div class="row">
+      <div class="row mt-4">
+        <div class="row mt-3 mb-3">
+          <div class="col-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
+              + Category
+            </button>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>No</th>
+                <th>Category Code</th>
+                <th>Category Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if categories %}
+              {% for category in categories %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ category.category_full_code }}</td>
+                <td>{{ category.category_name }}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="3" class="text-center">Belum ada data kategori.</td>
+              </tr>
+              {% endif %}
+            </tbody>
+
+          </table>
+
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Apex Chart -->
+<script src="/static/assets/js/plugins/apexcharts.min.js"></script>
+
+<!-- custom-chart js -->
+<script src="/static/assets/js/pages/dashboard-main.js"></script>
+
+{% endblock javascripts %}
+

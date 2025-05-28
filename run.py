@@ -1,6 +1,6 @@
-from simanja import create_app
+from simanja import simanja
 
-app = create_app()
+app = simanja()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

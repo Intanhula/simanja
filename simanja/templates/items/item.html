@@ -1,0 +1,130 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+
+            <div class="col-12">
+                <h4>Items List</h4>
+
+                {% if message %}
+                <div class="alert alert-info">{{ message }}</div>
+                {% endif %}
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    + Add Item
+                </button>
+
+                <!-- Items Table -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>No</th>
+                                <th>Item Code</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Received Date</th>
+                                <th>Status</th>
+                                <th>Hold By</th>
+                                <th>Location</th>
+                                <th>End Date</th>
+                                <th>Takeout Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if items %}
+                          {% for item in items %}
+                          <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ item.category_alias }}-{{ item.category_id_item }}-{{ item.item_id }}</td>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.category_name }}</td>
+                            <td>{{ item.received_date }}</td>
+                            <td>{{ item.category_status_name }}</td>
+                            <td>{{ item.category_status_name }}</td>
+                            <td>{{ item.takeout_date or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No items found.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal Add Item -->
+        <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form method="POST" action="{{ url_for('item.item') }}">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="item_name" class="form-label">Item Name *</label>
+                                <input type="text" class="form-control" id="item_name" name="item_name" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="category_id_item" class="form-label">Category *</label>
+                                <select id="category_id_item" name="category_id_item" class="form-select" required>
+                                    <option value="" disabled selected>Select category</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.category_id }}">{{ category.category_alias }}-{{ category.category_id }} - {{ category.category_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="received_date" class="form-label">Received Date *</label>
+                                <input type="date" class="form-control" id="received_date" name="received_date" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="status_id_item" class="form-label">Status *</label>
+                                <select id="status_id_item" name="status_id_item" class="form-select" required>
+                                    <option value="" disabled selected>Select status</option>
+                                    <option value="1">Available</option>
+                                    <option value="2">In Use</option>
+                                    <option value="3">Maintenance</option>
+                                    <option value="4">Disposed</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="takeout_date" class="form-label">Takeout Date</label>
+                                <input type="date" class="form-control" id="takeout_date" name="takeout_date" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Item</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<!-- Bootstrap 5 Bundle (modal, etc) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Apex Chart -->
+<script src="/static/assets/js/plugins/apexcharts.min.js"></script>
+
+<!-- custom-chart js -->
+<script src="/static/assets/js/pages/dashboard-main.js"></script>
+{% endblock javascripts %}
