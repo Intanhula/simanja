@@ -43,22 +43,49 @@
       </div>
     </div>
 
+    <!-- Modal Edit Kategori -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form method="POST" action="{{ url_for('item.edit_category') }}">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editCategoryLabel">Edit Kategori</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="category_id" id="editCategoryId">
+              <div class="mb-3">
+                <label for="editCategoryName" class="form-label">Nama Kategori</label>
+                <input type="text" class="form-control" name="category_name" id="editCategoryName" required>
+              </div>
+              <div class="mb-3">
+                <label for="editCategoryAlias" class="form-label">Alias</label>
+                <input type="text" class="form-control" name="category_alias" id="editCategoryAlias" required>
+              </div>
+              <div class="mb-3">
+                <label for="editCategoryCode" class="form-label">Kode</label>
+                <input type="text" class="form-control" name="category_code" id="editCategoryCode">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- [ Main Table ] start -->
     <div class="row">
-      <div class="row mt-4">
-        <div class="row mt-3 mb-3">
-          <div class="col-12">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
-              + Category
-            </button>
-          </div>
-        </div>
-
-        <div class="col-12">
-          <table class="table table-bordered table-hover">
+      <div class="col-12">
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#categoryModal">
+          + Category
+        </button>
+        <div class="table-responsive">
+          <table id="categoryTable" class="display table table-bordered table-hover table-striped">
             <thead class="table-dark">
               <tr>
-                <th style="width: 4rem;">No</th>
+                <th>No</th>
                 <th>Category Code</th>
                 <th>Category Name</th>
                 <th style="width: 6rem; text-align: center;">Actions</th>
@@ -69,42 +96,95 @@
               {% for category in categories %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ category.category_full_code }}</td>
-                <td>{{ category.category_name }}</td>
+                <td data-order="{{ category.category_code }}">{{ category.category_full_code }}</td>
+                <td data-order="{{ category.category_name }}">{{ category.category_name }}</td>
                 <td class="text-center">
-                  <!-- Edit icon -->
-                  <a href="" class="text-primary me-2" title="Edit">
+                  <div class="d-flex justify-content-center align-items-center gap-2">
+                    <!-- Edit -->
+                    <a href="#" class="text-primary me-2" title="Edit"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editCategoryModal"
+                    data-id="{{ category.category_id }}"
+                    data-name="{{ category.category_name }}"
+                    data-alias="{{ category.category_alias }}"
+                    data-code="{{ category.category_code }}">
                     <i class="feather icon-edit"></i>
                   </a>
-                  <!-- Delete icon -->
-                  <a href="" class="text-danger" title="Delete" onclick="return confirm('Yakin ingin menghapus?');">
+
+                  <!-- Delete -->
+                  <form method="POST" action="{{ url_for('item.delete_category') }}"
+                  onsubmit="return confirm('Yakin ingin menghapus?');" style="display:inline;">
+                  <input type="hidden" name="category_id" value="{{ category.category_id }}">
+                  <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Delete">
                     <i class="feather icon-trash-2"></i>
-                  </a>
-                </td>
-              </tr>
-              {% endfor %}
-              {% else %}
-              <tr>
-                <td colspan="3" class="text-center">Belum ada data kategori.</td>
-              </tr>
-              {% endif %}
-            </tbody>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td colspan="4" class="text-center">Belum ada data kategori.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
 
-          </table>
-
-        </div>
-      </div>
     </div>
-    
   </div>
-</div>
 
+</div>
+</div>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<!-- end jquery -->
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script>
+  const editModal = document.getElementById('editCategoryModal');
+  editModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-id');
+    const name = button.getAttribute('data-name');
+    const alias = button.getAttribute('data-alias');
+    const code = button.getAttribute('data-code');
 
+    editModal.querySelector('#editCategoryId').value = id;
+    editModal.querySelector('#editCategoryName').value = name;
+    editModal.querySelector('#editCategoryAlias').value = alias;
+    editModal.querySelector('#editCategoryCode').value = code;
+  });
+
+  $(document).ready(function () {
+    $('#categoryTable').DataTable({
+      columnDefs: [
+        { orderable: false, targets: [0, 3] } // Kolom No dan Actions tidak bisa diurutkan
+        ],
+      order: [[1, 'asc']], // Default sort berdasarkan Category Code ASC
+      language: {
+        search: "Cari:",
+        lengthMenu: "Tampilkan _MENU_ entri",
+        info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        infoEmpty: "Tidak ada data",
+        paginate: {
+          first: "Pertama",
+          last: "Terakhir",
+          next: "Berikutnya",
+          previous: "Sebelumnya"
+        },
+        zeroRecords: "Data tidak ditemukan"
+      }
+    });
+  });
+</script>
 <!-- Apex Chart -->
 <script src="/static/assets/js/plugins/apexcharts.min.js"></script>
 
